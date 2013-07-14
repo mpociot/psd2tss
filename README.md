@@ -2,7 +2,7 @@
 
 ## Description
 
-PSD2TSS is a Photoshop (CS4 and up) Script that converts a given PSD file into Titanium Alloy XML and TSS markup.
+PSD2TSS is a Photoshop (CS4 and up) Script that converts a given PSD file into Titanium Alloy XML and TSS markup. 
 
 ## Author
 
