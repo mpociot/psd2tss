@@ -6,18 +6,31 @@
  * @author Marcel Pociot 
  */
  var conf = {
-    magick: '/opt/ImageMagick/bin/convert',
-    root:   '/Users/marcelpociot/'
+    magick: '/opt/ImageMagick/bin/convert'
  },
  xmlLines  = [],
  outputXML = '',
  outputTSS = '',
+ outputPath = '',
  numLayers = 1, // Used for imagemagick
  structure = {};
       
 
 function run(){
     saveFile();
+
+    // Pop up save dialog
+    var targetDirectory = Folder.selectDialog("Please select your Titanium project directory:");
+
+    // User Cancelled
+    if(targetDirectory == null)
+    {
+        return;
+    }
+
+    // set outputPath to the one chosen in the dialog
+    outputPath            = targetDirectory.absoluteURI + "/";
+
 
     // Select first layer-set
     outputXML             = "<Alloy>\n<Window id=\"Window\">\n";
@@ -67,7 +80,7 @@ function dumpLayerSets(layerSet, currentElement)
             
             // Export layer as PNG
             var filename = 'psd2tss-'+numLayers+'.png';
-            app.system(conf.magick + ' /tmp/temp.psd['+numLayers+'] '+ conf.root + filename);
+            app.system(conf.magick + ' /tmp/temp.psd['+numLayers+'] '+ outputPath + filename);
             numLayers++;
             
             if( layer.name == 'Window' )
@@ -87,14 +100,21 @@ function dumpLayerSets(layerSet, currentElement)
             outputTSS += "\t'top': '" + layerObj.top + "', \n";
             outputTSS += "\t'left': '" + layerObj.left + "', \n";
 
+            /**
+             * Layer / element specific attribute mapping
+             */ 
+            switch( layer.name )
+            {
+                case 'Window':
+                    outputTSS += "\t'backgroundImage': '/images/" + filename + "', \n";
+                break;
+                case 'ImageView':
+                    outputTSS += "\t'image': '/images/" + filename + "', \n";
+                break;
+            }
+
             if( layer.name !== 'Window' )
             {
-                switch( layer.name )
-                {
-                    case 'ImageView':
-                        outputTSS += "\t'image': '/images/" + filename + "', \n";
-                    break;
-                }
                 xmlLines.unshift( 
                     '<' + layer.name + ' '+ attributes +'></' + layer.name + '>' + "\n"
                 );
