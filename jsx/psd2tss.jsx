@@ -11,6 +11,7 @@
  },
  xmlLines  = [],
  outputXML = '',
+ outputTSS = '',
  numLayers = 1, // Used for imagemagick
  structure = {};
       
@@ -19,7 +20,7 @@ function run(){
     saveFile();
 
     // Select first layer-set
-    outputXML             = "<Alloy>\n<Window>\n";
+    outputXML             = "<Alloy>\n<Window id=\"Window\">\n";
     layerSet              = app.activeDocument.layerSets[0];
     structure.name        = layerSet.name;
     structure.properties  = [];
@@ -63,26 +64,43 @@ function dumpLayerSets(layerSet, currentElement)
                     height: ( layer.bounds[3].as("px") - layer.bounds[1].as("px") )
              };
             currentElement.properties.unshift( layerObj );
+            
+            // Export layer as PNG
             var filename = 'psd2tss-'+numLayers+'.png';
             app.system(conf.magick + ' /tmp/temp.psd['+numLayers+'] '+ conf.root + filename);
             numLayers++;
             
-            var attributes = '';
+            if( layer.name == 'Window' )
+            {
+                var layerID    = layer.name;
+            } else {
+                var layerID    = layer.name +'_' + numLayers;
+            }
+            
+            var attributes = 'id="'+ layerID + '"';
+
+            outputTSS += "\n" + '#' + layerID + ' {' + "\n";
+
+            // Export basic properties
+            outputTSS += "\t'width': '" + layerObj.width + ",' \n";
+            outputTSS += "\t'height': '" + layerObj.height + "', \n";
+            outputTSS += "\t'top': '" + layerObj.top + "', \n";
+            outputTSS += "\t'left': '" + layerObj.left + "', \n";
 
             if( layer.name !== 'Window' )
             {
-
                 switch( layer.name )
                 {
                     case 'ImageView':
-                        attributes = 'src="/images/'+filename+'"';
+                        outputTSS += "\t'image': '/images/" + filename + "', \n";
                     break;
                 }
-
                 xmlLines.unshift( 
                     '<' + layer.name + ' '+ attributes +'></' + layer.name + '>' + "\n"
                 );
             }
+
+            outputTSS += "\n" + '} ' + "\n";
         }
     }
     // Current layerset contains other layersets
@@ -105,3 +123,4 @@ function dumpLayerSets(layerSet, currentElement)
 run();
 $.writeln( JSON.stringify( structure, undefined, 2 ) );
 $.writeln( outputXML );
+$.writeln( outputTSS );

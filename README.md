@@ -4,6 +4,36 @@
 
 PSD2TSS is a Photoshop (CS4 and up) Script that converts a given PSD file into Titanium Alloy XML and TSS markup. 
 
+PSD2TSS turns a structured PSD file like this:
+
+![image](http://www.marcelpociot.de/psd2tss/psd2tss_1.jpg)
+
+
+Into:
+
+	<Alloy>
+		<Window id="Window">
+			<ImageView id="ImageView_2"></ImageView>
+		</Window>
+	</Alloy>
+
+
+	#ImageView_2 {
+		'width': '513,' 
+		'height': '105', 
+		'top': '58', 
+		'left': '163', 
+		'image': '/images/psd2tss-1.png'
+	} 
+
+	#Window {
+		'width': '640,' 
+		'height': '919', 
+		'top': '0', 
+		'left': '0'
+	} 
+
+
 ## Prerequisites
 * ImageMagick installed
 
