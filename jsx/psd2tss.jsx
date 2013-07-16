@@ -1,4 +1,6 @@
+// EDIT THIS FOLDER
 #include /Users/marcelpociot/json.jsx
+
 /**
  * This script converts a PSD layer structure
  * into Titanium Alloy XML / TSS markup.
@@ -6,6 +8,7 @@
  * @author Marcel Pociot 
  */
  var conf = {
+    // EDIT
     magick: '/opt/ImageMagick/bin/convert'
  },
  xmlLines  = [],

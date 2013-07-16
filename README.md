@@ -33,9 +33,34 @@ Into:
 		'left': '0'
 	} 
 
-
 ## Prerequisites
 * ImageMagick installed
+
+## Usage
+* Download the github project.
+
+* Extract it to the Presets/Scripts folder of your Photoshop installation folder.
+
+* Open the `psd2tss.jsx` file and edit the following lines:
+
+	This should represent the location of the `json.jsx` file inside the "lib" folder.
+	
+		#include /Users/marcelpociot/json.jsx
+
+	Locate your ImageMagick installation
+
+		 var conf = {
+    		// EDIT
+		    magick: '/opt/ImageMagick/bin/convert'
+		 }
+* Restart Photoshop if it was already running
+* Open the example PSD
+* Go to File > Scripts and select psd2tss from the list
+
+## Todo
+* Autodetect ImageMagick
+* Autoload json.jsx
+* Implement more properties :)
 
 ## Author
 
