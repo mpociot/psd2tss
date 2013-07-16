@@ -40,9 +40,21 @@ function run(){
     dumpLayerSets(layerSet, structure); 
     for( var i=0,max=xmlLines.length; i < max; i++ )
     {
-        outputXML += xmlLines[i];
+        outputXML += "\t" + xmlLines[i];
     }
     outputXML            += "</Window>\n</Alloy>\n";
+
+    // Write TSS file
+    var stylesPath = new Folder( outputPath + 'styles' ).create();
+    var tssFile = new File( outputPath + 'styles/' + structure.name + '.tss' );
+    tssFile.open( 'w' );
+    tssFile.write( outputTSS );
+
+    // Write XML file
+    var viewsPath = new Folder( outputPath + 'views' ).create();
+    var tssFile = new File( outputPath + 'views/' + structure.name + '.xml' );
+    tssFile.open( 'w' );
+    tssFile.write( outputXML );
 }
 
 /**
